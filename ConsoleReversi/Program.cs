@@ -2,10 +2,10 @@
 
 var board = new Board(8);
 
-board.SetDisk(Disk.White, Row.D, Column.Four);
-board.SetDisk(Disk.Black, Row.E, Column.Four);
-board.SetDisk(Disk.Black, Row.D, Column.Five);
-board.SetDisk(Disk.White, Row.E, Column.Five);
+board.SetDisk(PlayerColor.White, new Coordinate(3, 3));
+board.SetDisk(PlayerColor.Black, new Coordinate(3, 4));
+board.SetDisk(PlayerColor.Black, new Coordinate(4, 3));
+board.SetDisk(PlayerColor.White, new Coordinate(4, 4));
 
 var grid = board.GetGrid();
 
@@ -19,8 +19,8 @@ for (var columnIndex = 0; columnIndex < grid.GetLength(1); columnIndex++)
         var disk = grid[rowIndex, columnIndex];
         var display = disk switch
         {
-            Disk.Black => "B",
-            Disk.White => "W",
+            PlayerColor.Black => "B",
+            PlayerColor.White => "W",
             null => "_"
         };
         Console.Write(display);

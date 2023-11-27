@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenTeaReversi", "GreenTeaReversi\GreenTeaReversi.csproj", "{7AA4AA41-41DB-468C-A834-47618D9410B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreenTeaReversi", "GreenTeaReversi\GreenTeaReversi.csproj", "{7AA4AA41-41DB-468C-A834-47618D9410B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleReversi", "ConsoleReversi\ConsoleReversi.csproj", "{6F80582A-1F54-4A85-9CEE-931E24DFE2BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleReversi", "ConsoleReversi\ConsoleReversi.csproj", "{6F80582A-1F54-4A85-9CEE-931E24DFE2BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenTeaReversiTests", "GreenTeaReversiTests\GreenTeaReversiTests.csproj", "{F307DF63-D3EB-4A2F-9EB2-63B82AA98824}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{6F80582A-1F54-4A85-9CEE-931E24DFE2BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F80582A-1F54-4A85-9CEE-931E24DFE2BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F80582A-1F54-4A85-9CEE-931E24DFE2BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F307DF63-D3EB-4A2F-9EB2-63B82AA98824}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F307DF63-D3EB-4A2F-9EB2-63B82AA98824}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F307DF63-D3EB-4A2F-9EB2-63B82AA98824}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F307DF63-D3EB-4A2F-9EB2-63B82AA98824}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

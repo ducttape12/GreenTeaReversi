@@ -2,60 +2,46 @@
 {
     public class Board
     {
-        private readonly Disk?[,] grid = new Disk?[8, 8];
+        private readonly PlayerColor?[,] grid;
+
+        public int ColumnLength => grid.GetLength(1);
+        public int RowLength => grid.GetLength(0);
+        public int SquareCount => grid.Length;
 
         public Board(int size)
         {
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(size);
 
-            grid = new Disk?[size, size];
+            grid = new PlayerColor?[size, size];
         }
 
-        public Disk?[,] GetGrid()
+        public PlayerColor?[,] GetGrid()
         {
-            var newGrid = new Disk?[grid.GetLength(0), grid.GetLength(1)];
+            var newGrid = new PlayerColor?[grid.GetLength(0), grid.GetLength(1)];
             Array.Copy(grid, newGrid, grid.Length);
             return newGrid;
         }
 
-        public void SetDisk(Disk disk, Row row, Column column)
+        public void SetDisk(PlayerColor playerColor, Coordinate coordinate)
         {
-            var rowIndex = RowToIndex(row);
-            var columnIndex = ColumnToIndex(column);
+            ValidateRowAndColumn(coordinate);
 
-            grid[rowIndex, columnIndex] = disk;
+            grid[coordinate.Row, coordinate.Column] = playerColor;
         }
 
-        private static int RowToIndex(Row row)
+        public PlayerColor? GetPlayerColor(Coordinate coordinate)
         {
-            return row switch
-            {
-                Row.A => 0,
-                Row.B => 1,
-                Row.C => 2,
-                Row.D => 3,
-                Row.E => 4,
-                Row.F => 5,
-                Row.G => 6,
-                Row.H => 7,
-                _ => throw new NotImplementedException($"Unknown Row {row}")
-            };
+            ValidateRowAndColumn(coordinate);
+
+            return grid[coordinate.Row, coordinate.Column];
         }
 
-        private static int ColumnToIndex(Column column)
+        private void ValidateRowAndColumn(Coordinate coordinate)
         {
-            return column switch
-            {
-                Column.One => 0,
-                Column.Two => 1,
-                Column.Three => 2,
-                Column.Four => 3,
-                Column.Five => 4,
-                Column.Six => 5,
-                Column.Seven => 6,
-                Column.Eight => 7,
-                _ => throw new NotImplementedException($"Unknown Column {column}")
-            };
+            ArgumentOutOfRangeException.ThrowIfLessThan(coordinate.Row, 0);
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(coordinate.Row, RowLength);
+            ArgumentOutOfRangeException.ThrowIfLessThan(coordinate.Column, 0);
+            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(coordinate.Column, ColumnLength);
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace GreenTeaReversi
 {
-    public enum Disk
+    public enum PlayerColor : byte
     {
         White,
         Black
