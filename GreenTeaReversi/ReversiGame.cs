@@ -28,31 +28,53 @@
             CurrentPlayerColor = PlayerColor.Black;
         }
 
-        //public IList<Coordinate> MovesForCurrentPlayer()
-        //{
-        //    var possibleMoves = new List<Coordinate>(board.SquareCount);
+        public IList<Coordinate> ValidMovesForCurrentPlayer()
+        {
+            var possibleMoves = new List<Coordinate>(board.SquareCount);
 
-        //    for (byte row = 0; row < board.RowLength; row++)
-        //    {
-        //        for (byte column = 0; column < board.ColumnLength; column++)
-        //        {
-        //            var currentCoordinate = new Coordinate(row, column);
+            // Check all squares to determine if it's a valid move
+            for (var row = 0; row < board.RowLength; row++)
+            {
+                for (var column = 0; column < board.ColumnLength; column++)
+                {
+                    var currentCoordinate = new Coordinate(row, column);
 
-        //            var colorAtCoordinate = board.GetPlayerColor(currentCoordinate);
+                    var colorAtCoordinate = board.GetPlayerColor(currentCoordinate);
 
-        //            // Only consider coordinates without pieces
-        //            if (colorAtCoordinate != null)
-        //            {
-        //                continue;
-        //            }
+                    // Only consider coordinates without pieces
+                    if (colorAtCoordinate != null)
+                    {
+                        continue;
+                    }
 
-        //            // Start walking in direction.  If first step is other player, countine.  Keep walking.  If find player then
-        //            // true otherwise if run out of runway or null then false.
-        //            // CheckForLine(startColumn, startRow, columnDelta, rowDelta);
-        //        }
-        //    }
+                    // Check all directions to see if placing a piece here makes a valid chain
+                    var directions = new List<(int, int)>()
+                    {
+                        (0, 1),   // East
+                        (-1, 1),  // Northeast
+                        (-1, 0),  // North
+                        (-1, -1), // Northwest
+                        (0, -1),  // West
+                        (1, -1),  // Southwest
+                        (1, 0),   // South
+                        (1, 1)    // Southeast
+                    };
 
-        //}
+                    foreach (var direction in directions)
+                    {
+                        (var rowDelta, var columnDelta) = direction;
+
+                        if (DirectionHasCurrentPlayerChain(currentCoordinate, rowDelta, columnDelta))
+                        {
+                            possibleMoves.Add(currentCoordinate);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return possibleMoves;
+        }
 
         public bool DirectionHasCurrentPlayerChain(Coordinate startCoordinate, int rowDelta, int columnDelta)
         {
@@ -98,13 +120,5 @@
             // Scenario 5
             return false;
         }
-
-
-
-        // 1. All moves that touch another piece of opponent color
-        // 2. Keep going in that direction until the player color is found
-        // 3. If found, then a valid move and move on
-        // 4. if not found, go back to 1.
-        // 5. If all directions exhausted in 1, then no move found.  Move on to next empty square.
     }
 }

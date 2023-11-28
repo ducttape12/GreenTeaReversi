@@ -17,7 +17,7 @@ namespace GreenTeaReversiTests
         }
 
         [TestMethod]
-        public void GivenCurrentPlayerWhite_WhenCalledWithNorthEast_ThenReturnsExpectedValues()
+        public void GivenCurrentPlayerWhite_WhenCalledWithNortheast_ThenReturnsExpectedValues()
         {
             TestAllScenarios(startCoordinate: new Coordinate(3, 3),
                              edgeCoordinate: new Coordinate(0, 7),
@@ -35,7 +35,7 @@ namespace GreenTeaReversiTests
         }
 
         [TestMethod]
-        public void GivenCurrentPlayerWhite_WhenCalledWithNorthWest_ThenReturnsExpectedValues()
+        public void GivenCurrentPlayerWhite_WhenCalledWithNorthwest_ThenReturnsExpectedValues()
         {
             TestAllScenarios(startCoordinate: new Coordinate(3, 3),
                              edgeCoordinate: new Coordinate(0, 0),
@@ -53,7 +53,7 @@ namespace GreenTeaReversiTests
         }
 
         [TestMethod]
-        public void GivenCurrentPlayerWhite_WhenCalledWithSouthWest_ThenReturnsExpectedValues()
+        public void GivenCurrentPlayerWhite_WhenCalledWithSouthwest_ThenReturnsExpectedValues()
         {
             TestAllScenarios(startCoordinate: new Coordinate(3, 3),
                              edgeCoordinate: new Coordinate(7, 0),
@@ -71,7 +71,7 @@ namespace GreenTeaReversiTests
         }
 
         [TestMethod]
-        public void GivenCurrentPlayerWhite_WhenCalledWithSouthEast_ThenReturnsExpectedValues()
+        public void GivenCurrentPlayerWhite_WhenCalledWithSoutheast_ThenReturnsExpectedValues()
         {
             TestAllScenarios(startCoordinate: new Coordinate(3, 3),
                              edgeCoordinate: new Coordinate(7, 7),
