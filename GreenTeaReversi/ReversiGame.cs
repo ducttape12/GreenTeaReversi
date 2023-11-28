@@ -94,21 +94,32 @@
             CurrentPlayerColor = OpponentColor;
 
             // If there are no valid moves for the current player, then switch back to the previous player
-            if(!GetValidMovesForCurrentPlayer().Any())
+            if (!GetValidMovesForCurrentPlayer().Any())
             {
                 var possibleActionResult = CurrentPlayerColor == PlayerColor.White ? ActionResult.WhiteNoValidMoves : ActionResult.BlackNoValidMoves;
 
                 CurrentPlayerColor = OpponentColor;
 
                 // If there are valid moves for the first player, then just mark it as such
-                if(GetValidMovesForCurrentPlayer().Any())
+                if (GetValidMovesForCurrentPlayer().Any())
                 {
                     results.Add(possibleActionResult);
                 }
                 // Otherwise it's game over
                 else
                 {
-                    // TODO: Mark game over and determine winner
+                    if (board.WhiteDiskCount > board.BlackDiskCount)
+                    {
+                        results.Add(ActionResult.GameOverWhiteWins);
+                    }
+                    else if (board.BlackDiskCount > board.WhiteDiskCount)
+                    {
+                        results.Add(ActionResult.GameOverBlackWins);
+                    }
+                    else
+                    {
+                        results.Add(ActionResult.GameOverTie);
+                    }
                 }
             }
 
@@ -167,6 +178,8 @@
                 return false;
             }
 
+            board.SetDisk(CurrentPlayerColor, startCoordinate);
+
             var inspectRow = startCoordinate.Row + direction.RowDelta;
             var inspectColumn = startCoordinate.Column + direction.ColumnDelta;
 
@@ -189,6 +202,11 @@
             }
 
             return true;
+        }
+
+        public PlayerColor?[,] GetGrid()
+        {
+            return board.GetGrid();
         }
     }
 }
