@@ -28,7 +28,7 @@
             CurrentPlayerColor = PlayerColor.Black;
         }
 
-        public IList<Coordinate> ValidMovesForCurrentPlayer()
+        public IList<Coordinate> GetValidMovesForCurrentPlayer()
         {
             var possibleMoves = new List<Coordinate>(board.SquareCount);
 
@@ -47,28 +47,9 @@
                         continue;
                     }
 
-                    // Check all directions to see if placing a piece here makes a valid chain
-                    var directions = new List<(int, int)>()
+                    if (IsCurrentPlayerValidMove(currentCoordinate))
                     {
-                        (0, 1),   // East
-                        (-1, 1),  // Northeast
-                        (-1, 0),  // North
-                        (-1, -1), // Northwest
-                        (0, -1),  // West
-                        (1, -1),  // Southwest
-                        (1, 0),   // South
-                        (1, 1)    // Southeast
-                    };
-
-                    foreach (var direction in directions)
-                    {
-                        (var rowDelta, var columnDelta) = direction;
-
-                        if (DirectionHasCurrentPlayerChain(currentCoordinate, rowDelta, columnDelta))
-                        {
-                            possibleMoves.Add(currentCoordinate);
-                            break;
-                        }
+                        possibleMoves.Add(currentCoordinate);
                     }
                 }
             }
@@ -76,12 +57,70 @@
             return possibleMoves;
         }
 
-        public bool DirectionHasCurrentPlayerChain(Coordinate startCoordinate, int rowDelta, int columnDelta)
+        private bool IsCurrentPlayerValidMove(Coordinate coordinate)
+        {
+            // Check all directions to see if placing a piece here makes a valid chain
+            foreach (var direction in Directions.AllDirections)
+            {
+                if (DirectionHasCurrentPlayerChain(coordinate, direction))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public IList<ActionResult> PlaceCurrentPlayerDisk(Coordinate coordinate)
+        {
+            var results = new List<ActionResult>();
+            var chainFlipped = false;
+
+            // If possible, flip chains
+            foreach (var direction in Directions.AllDirections)
+            {
+                chainFlipped = chainFlipped || FlipOpponentDisks(coordinate, direction);
+            }
+
+            // If no chains flipped, then this was an invalid move
+            if (!chainFlipped)
+            {
+                return new List<ActionResult>() { ActionResult.InvalidMove };
+            }
+
+            results.Add(ActionResult.ValidMove);
+
+            // Switch to the other player
+            CurrentPlayerColor = OpponentColor;
+
+            // If there are no valid moves for the current player, then switch back to the previous player
+            if(!GetValidMovesForCurrentPlayer().Any())
+            {
+                var possibleActionResult = CurrentPlayerColor == PlayerColor.White ? ActionResult.WhiteNoValidMoves : ActionResult.BlackNoValidMoves;
+
+                CurrentPlayerColor = OpponentColor;
+
+                // If there are valid moves for the first player, then just mark it as such
+                if(GetValidMovesForCurrentPlayer().Any())
+                {
+                    results.Add(possibleActionResult);
+                }
+                // Otherwise it's game over
+                else
+                {
+                    // TODO: Mark game over and determine winner
+                }
+            }
+
+            return results;
+        }
+
+        public bool DirectionHasCurrentPlayerChain(Coordinate startCoordinate, Direction direction)
         {
             var opponentColorCount = 0;
 
-            var inspectRow = startCoordinate.Row + rowDelta;
-            var inspectColumn = startCoordinate.Column + columnDelta;
+            var inspectRow = startCoordinate.Row + direction.RowDelta;
+            var inspectColumn = startCoordinate.Column + direction.ColumnDelta;
 
             // Scenarios to handle (assuming current player white and walking east, # is start coordinate):
             // 1. #BW| => True
@@ -113,12 +152,43 @@
                     opponentColorCount++;
                 }
 
-                inspectRow += rowDelta;
-                inspectColumn += columnDelta;
+                inspectRow += direction.RowDelta;
+                inspectColumn += direction.ColumnDelta;
             }
 
             // Scenario 5
             return false;
+        }
+
+        private bool FlipOpponentDisks(Coordinate startCoordinate, Direction direction)
+        {
+            if (!DirectionHasCurrentPlayerChain(startCoordinate, direction))
+            {
+                return false;
+            }
+
+            var inspectRow = startCoordinate.Row + direction.RowDelta;
+            var inspectColumn = startCoordinate.Column + direction.ColumnDelta;
+
+            while (inspectRow >= 0 && inspectRow < board.RowLength &&
+                inspectColumn >= 0 && inspectColumn < board.ColumnLength)
+            {
+                var inspectCoordinate = new Coordinate(inspectRow, inspectColumn);
+
+                var colorAtInspectCoordinate = board.GetPlayerColor(inspectCoordinate);
+
+                if (colorAtInspectCoordinate == CurrentPlayerColor)
+                {
+                    break;
+                }
+
+                board.SetDisk(CurrentPlayerColor, inspectCoordinate);
+
+                inspectRow += direction.RowDelta;
+                inspectColumn += direction.ColumnDelta;
+            }
+
+            return true;
         }
     }
 }

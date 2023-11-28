@@ -12,8 +12,7 @@ namespace GreenTeaReversiTests
         {
             TestAllScenarios(startCoordinate: new Coordinate(3, 3),
                              edgeCoordinate: new Coordinate(3, 7),
-                             rowDelta: 0,
-                             columnDelta: 1);
+                             direction: Directions.East);
         }
 
         [TestMethod]
@@ -21,8 +20,7 @@ namespace GreenTeaReversiTests
         {
             TestAllScenarios(startCoordinate: new Coordinate(3, 3),
                              edgeCoordinate: new Coordinate(0, 7),
-                             rowDelta: -1,
-                             columnDelta: 1);
+                             direction: Directions.Northeast);
         }
 
         [TestMethod]
@@ -30,8 +28,7 @@ namespace GreenTeaReversiTests
         {
             TestAllScenarios(startCoordinate: new Coordinate(3, 3),
                              edgeCoordinate: new Coordinate(0, 3),
-                             rowDelta: -1,
-                             columnDelta: 0);
+                             direction: Directions.North);
         }
 
         [TestMethod]
@@ -39,8 +36,7 @@ namespace GreenTeaReversiTests
         {
             TestAllScenarios(startCoordinate: new Coordinate(3, 3),
                              edgeCoordinate: new Coordinate(0, 0),
-                             rowDelta: -1,
-                             columnDelta: -1);
+                             direction: Directions.Northwest);
         }
 
         [TestMethod]
@@ -48,8 +44,7 @@ namespace GreenTeaReversiTests
         {
             TestAllScenarios(startCoordinate: new Coordinate(3, 3),
                              edgeCoordinate: new Coordinate(3, 0),
-                             rowDelta: 0,
-                             columnDelta: -1);
+                             direction: Directions.West);
         }
 
         [TestMethod]
@@ -57,8 +52,7 @@ namespace GreenTeaReversiTests
         {
             TestAllScenarios(startCoordinate: new Coordinate(3, 3),
                              edgeCoordinate: new Coordinate(7, 0),
-                             rowDelta: 1,
-                             columnDelta: -1);
+                             direction:Directions.Southwest);
         }
 
         [TestMethod]
@@ -66,8 +60,7 @@ namespace GreenTeaReversiTests
         {
             TestAllScenarios(startCoordinate: new Coordinate(3, 3),
                              edgeCoordinate: new Coordinate(7, 3),
-                             rowDelta: 1,
-                             columnDelta: 0);
+                             direction: Directions.South);
         }
 
         [TestMethod]
@@ -75,13 +68,14 @@ namespace GreenTeaReversiTests
         {
             TestAllScenarios(startCoordinate: new Coordinate(3, 3),
                              edgeCoordinate: new Coordinate(7, 7),
-                             rowDelta: 1,
-                             columnDelta: 1);
+                             direction: Directions.Southeast);
         }
 
-        public void TestAllScenarios(Coordinate startCoordinate, Coordinate edgeCoordinate, int rowDelta, int columnDelta)
+        public void TestAllScenarios(Coordinate startCoordinate, Coordinate edgeCoordinate, Direction direction)
         {
             var playerColors = new List<PlayerColor>() { PlayerColor.White, PlayerColor.Black };
+            var rowDelta = direction.RowDelta;
+            var columnDelta = direction.ColumnDelta;
 
             foreach (var currentPlayer in playerColors)
             {
