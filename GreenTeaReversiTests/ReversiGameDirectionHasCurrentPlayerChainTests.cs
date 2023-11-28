@@ -52,7 +52,7 @@ namespace GreenTeaReversiTests
         {
             TestAllScenarios(startCoordinate: new Coordinate(3, 3),
                              edgeCoordinate: new Coordinate(7, 0),
-                             direction:Directions.Southwest);
+                             direction: Directions.Southwest);
         }
 
         [TestMethod]
@@ -74,97 +74,97 @@ namespace GreenTeaReversiTests
         public void TestAllScenarios(Coordinate startCoordinate, Coordinate edgeCoordinate, Direction direction)
         {
             var playerColors = new List<PlayerColor>() { PlayerColor.White, PlayerColor.Black };
-            var rowDelta = direction.RowDelta;
-            var columnDelta = direction.ColumnDelta;
 
             foreach (var currentPlayer in playerColors)
             {
-                GivenBoardForOpponentCurrent_WhenCalled_ThenReturnsTrue(currentPlayer, startCoordinate, rowDelta, columnDelta);
-                GivenBoardForCurrent_WhenCalled_ThenReturnsFalse(currentPlayer, startCoordinate, rowDelta, columnDelta);
-                GivenBoardForOpponent_WhenCalled_ThenReturnsFalse(currentPlayer, startCoordinate, rowDelta, columnDelta);
-                GivenEmptyBoard_WhenCalled_ThenReturnsFalse(currentPlayer, startCoordinate, rowDelta, columnDelta);
-                GivenPlayerAtEnd_WhenCalled_ThenReturnsFalse(currentPlayer, edgeCoordinate, rowDelta, columnDelta);
+                GivenBoardForOpponentCurrent_WhenCalled_ThenReturnsTrue(currentPlayer, startCoordinate, direction);
+                GivenBoardForCurrent_WhenCalled_ThenReturnsFalse(currentPlayer, startCoordinate, direction);
+                GivenBoardForOpponent_WhenCalled_ThenReturnsFalse(currentPlayer, startCoordinate, direction);
+                GivenEmptyBoard_WhenCalled_ThenReturnsFalse(currentPlayer, startCoordinate, direction);
+                GivenPlayerAtEnd_WhenCalled_ThenReturnsFalse(currentPlayer, edgeCoordinate, direction);
             }
         }
 
         public void GivenBoardForOpponentCurrent_WhenCalled_ThenReturnsTrue(PlayerColor currentPlayer,
-                                                                            Coordinate startCoordinate, int rowDelta,
-                                                                            int columnDelta)
+                                                                            Coordinate startCoordinate,
+                                                                            Direction direction)
         {
             // Arrange
             var board = new Board(BoardSize);
             board.SetDisk(OpponentColor(currentPlayer),
-                          new Coordinate(startCoordinate.Row + rowDelta,
-                                         startCoordinate.Column + columnDelta));
+                          new Coordinate(startCoordinate.Row + direction.RowDelta,
+                                         startCoordinate.Column + direction.ColumnDelta));
             board.SetDisk(currentPlayer,
-                          new Coordinate(startCoordinate.Row + rowDelta + rowDelta,
-                                         startCoordinate.Column + columnDelta + columnDelta));
+                          new Coordinate(startCoordinate.Row + direction.RowDelta + direction.RowDelta,
+                                         startCoordinate.Column + direction.ColumnDelta + direction.ColumnDelta));
             var game = new ReversiGame(board, currentPlayer);
 
             // Act
-            var hasChain = game.DirectionHasCurrentPlayerChain(startCoordinate, rowDelta, columnDelta);
+            var hasChain = game.DirectionHasCurrentPlayerChain(startCoordinate, direction);
 
             // Assert
             Assert.IsTrue(hasChain);
         }
 
         public void GivenBoardForCurrent_WhenCalled_ThenReturnsFalse(PlayerColor currentPlayer,
-                                                                     Coordinate startCoordinate, int rowDelta,
-                                                                     int columnDelta)
+                                                                     Coordinate startCoordinate,
+                                                                     Direction direction)
         {
             // Arrange
             var board = new Board(BoardSize);
             board.SetDisk(currentPlayer,
-                          new Coordinate(startCoordinate.Row + rowDelta, startCoordinate.Column + columnDelta));
+                          new Coordinate(startCoordinate.Row + direction.RowDelta, startCoordinate.Column + direction.ColumnDelta));
             var game = new ReversiGame(board, currentPlayer);
 
             // Act
-            var hasChain = game.DirectionHasCurrentPlayerChain(startCoordinate, rowDelta, columnDelta);
+            var hasChain = game.DirectionHasCurrentPlayerChain(startCoordinate, direction);
 
             // Assert
             Assert.IsFalse(hasChain);
         }
 
         public void GivenBoardForOpponent_WhenCalled_ThenReturnsFalse(PlayerColor currentPlayer,
-                                                                      Coordinate startCoordinate, int rowDelta,
-                                                                      int columnDelta)
+                                                                      Coordinate startCoordinate,
+                                                                      Direction direction)
         {
             // Arrange
             var board = new Board(BoardSize);
             board.SetDisk(OpponentColor(currentPlayer),
-                          new Coordinate(startCoordinate.Row + rowDelta, startCoordinate.Column + columnDelta));
+                          new Coordinate(startCoordinate.Row + direction.RowDelta, startCoordinate.Column + direction.ColumnDelta));
             var game = new ReversiGame(board, PlayerColor.White);
 
             // Act
-            var hasChain = game.DirectionHasCurrentPlayerChain(startCoordinate, rowDelta, columnDelta);
+            var hasChain = game.DirectionHasCurrentPlayerChain(startCoordinate, direction);
 
             // Assert
             Assert.IsFalse(hasChain);
         }
 
-        public void GivenEmptyBoard_WhenCalled_ThenReturnsFalse(PlayerColor currentPlayer, Coordinate startCoordinate,
-                                                                int rowDelta, int columnDelta)
+        public void GivenEmptyBoard_WhenCalled_ThenReturnsFalse(PlayerColor currentPlayer,
+                                                                Coordinate startCoordinate,
+                                                                Direction direction)
         {
             // Arrange
             var board = new Board(BoardSize);
             var game = new ReversiGame(board, currentPlayer);
 
             // Act
-            var hasChain = game.DirectionHasCurrentPlayerChain(startCoordinate, rowDelta, columnDelta);
+            var hasChain = game.DirectionHasCurrentPlayerChain(startCoordinate, direction);
 
             // Assert
             Assert.IsFalse(hasChain);
         }
 
-        public void GivenPlayerAtEnd_WhenCalled_ThenReturnsFalse(PlayerColor currentPlayer, Coordinate startCoordinate,
-                                                                 int rowDelta, int columnDelta)
+        public void GivenPlayerAtEnd_WhenCalled_ThenReturnsFalse(PlayerColor currentPlayer,
+                                                                 Coordinate startCoordinate,
+                                                                 Direction direction)
         {
             // Arrange
             var board = new Board(BoardSize);
             var game = new ReversiGame(board, currentPlayer);
 
             // Act
-            var hasChain = game.DirectionHasCurrentPlayerChain(startCoordinate, rowDelta, columnDelta);
+            var hasChain = game.DirectionHasCurrentPlayerChain(startCoordinate, direction);
 
             // Assert
             Assert.IsFalse(hasChain);

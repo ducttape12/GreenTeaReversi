@@ -8,6 +8,11 @@
         public int RowLength => grid.GetLength(0);
         public int SquareCount => grid.Length;
 
+        public int BlackDiskCount { get; private set; } = 0;
+        public int WhiteDiskCount { get; private set; } = 0;
+        public int FreeSquaresCount => SquareCount - BlackDiskCount - WhiteDiskCount;
+
+
         public Board(int size)
         {
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(size);
@@ -22,11 +27,35 @@
             return newGrid;
         }
 
-        public void SetDisk(PlayerColor playerColor, Coordinate coordinate)
+        public void SetDisk(PlayerColor diskColor, Coordinate coordinate)
         {
             ValidateRowAndColumn(coordinate);
 
-            grid[coordinate.Row, coordinate.Column] = playerColor;
+            var colorAtCoordinate = grid[coordinate.Row, coordinate.Column];
+
+            // Instead of recalculating these counts on demand, update them here for performance purposes
+            if(colorAtCoordinate.HasValue)
+            {
+                if(colorAtCoordinate.Value == PlayerColor.White)
+                {
+                    WhiteDiskCount--;
+                }
+                else
+                {
+                    BlackDiskCount--;
+                }
+            }
+
+            grid[coordinate.Row, coordinate.Column] = diskColor;
+
+            if(diskColor == PlayerColor.White)
+            {
+                WhiteDiskCount++;
+            }
+            else
+            {
+                BlackDiskCount++;
+            }
         }
 
         public PlayerColor? GetPlayerColor(Coordinate coordinate)
