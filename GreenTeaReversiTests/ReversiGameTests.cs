@@ -230,13 +230,71 @@ namespace GreenTeaReversiTests
                 "________", game);
         }
 
-        // TODO: Additional tests to add
-        // 1. Black making multiple chains
-        // 2. Black no moves
-        // 3. White no moves
-        // 4. No moves, white wins
-        // 5. No moves, black wins
-        // 6. No moves, tie
+        [TestMethod]
+        public void GivenReversiBoard_WhenBlackMovePreventsWhite_ThenBlackMovesAgain()
+        {
+            // Arrange
+            var layout = "________" +
+                         "________" +
+                         "________" +
+                         "________" +
+                         "________" +
+                         "________" +
+                         "_______W" +
+                         "______WB";
+            var game = InitializeReversiGame(layout, PlayerColor.Black);
+
+            // Act
+            var results = game.PlaceCurrentPlayerDisk(new Coordinate(5, 7));
+
+            // Assert
+            Assert.AreEqual(2, results.Count);
+            Assert.AreEqual(ActionResult.ValidMove, results.First());
+            Assert.AreEqual(ActionResult.WhiteNoValidMoves, results.Last());
+            Assert.AreEqual(PlayerColor.Black, game.CurrentPlayerColor);
+            AssertBoardLayout(
+                "________" +
+                "________" +
+                "________" +
+                "________" +
+                "________" +
+                "_______B" +
+                "_______B" +
+                "______WB", game);
+        }
+
+        [TestMethod]
+        public void GivenReversiBoard_WhenWhiteMovePreventsBlack_ThenWhiteMovesAgain()
+        {
+            // Arrange
+            var layout = "________" +
+                         "________" +
+                         "________" +
+                         "________" +
+                         "________" +
+                         "________" +
+                         "_______B" +
+                         "______BW";
+            var game = InitializeReversiGame(layout, PlayerColor.White);
+
+            // Act
+            var results = game.PlaceCurrentPlayerDisk(new Coordinate(5, 7));
+
+            // Assert
+            Assert.AreEqual(2, results.Count);
+            Assert.AreEqual(ActionResult.ValidMove, results.First());
+            Assert.AreEqual(ActionResult.BlackNoValidMoves, results.Last());
+            Assert.AreEqual(PlayerColor.White, game.CurrentPlayerColor);
+            AssertBoardLayout(
+                "________" +
+                "________" +
+                "________" +
+                "________" +
+                "________" +
+                "_______W" +
+                "_______W" +
+                "______BW", game);
+        }
 
         [TestMethod]
         public void ConfirmInitializeBoardAndAssertBoardLayoutAreWorking()
