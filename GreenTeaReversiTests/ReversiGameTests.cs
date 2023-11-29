@@ -297,6 +297,171 @@ namespace GreenTeaReversiTests
         }
 
         [TestMethod]
+        public void GivenReversiBoard_WhenBlackMovesAndNoWhiteMovesRemaining_ThenGameOver()
+        {
+            // Arrange
+            var layout = "________" +
+                         "________" +
+                         "________" +
+                         "________" +
+                         "________" +
+                         "________" +
+                         "_______W" +
+                         "_______B";
+            var game = InitializeReversiGame(layout, PlayerColor.Black);
+
+            // Act
+            var results = game.PlaceCurrentPlayerDisk(new Coordinate(5, 7));
+
+            // Assert
+            Assert.AreEqual(2, results.Count);
+            Assert.AreEqual(ActionResult.ValidMove, results.First());
+            Assert.AreEqual(ActionResult.GameOverBlackWins, results.Last());
+            Assert.AreEqual(PlayerColor.Black, game.CurrentPlayerColor);
+            AssertBoardLayout(
+                "________" +
+                "________" +
+                "________" +
+                "________" +
+                "________" +
+                "_______B" +
+                "_______B" +
+                "_______B", game);
+        }
+
+        [TestMethod]
+        public void GivenReversiBoard_WhenWhiteMovesAndNoBlackMovesRemaining_ThenGameOver()
+        {
+            // Arrange
+            var layout = "________" +
+                         "________" +
+                         "________" +
+                         "________" +
+                         "________" +
+                         "________" +
+                         "_______B" +
+                         "_______W";
+            var game = InitializeReversiGame(layout, PlayerColor.White);
+
+            // Act
+            var results = game.PlaceCurrentPlayerDisk(new Coordinate(5, 7));
+
+            // Assert
+            Assert.AreEqual(2, results.Count);
+            Assert.AreEqual(ActionResult.ValidMove, results.First());
+            Assert.AreEqual(ActionResult.GameOverWhiteWins, results.Last());
+            Assert.AreEqual(PlayerColor.White, game.CurrentPlayerColor);
+            AssertBoardLayout(
+                "________" +
+                "________" +
+                "________" +
+                "________" +
+                "________" +
+                "_______W" +
+                "_______W" +
+                "_______W", game);
+        }
+
+        [TestMethod]
+        public void GivenReversiBoard_WhenBlackMovesAndNoSpacesLeft_ThenGameOver()
+        {
+            // Arrange
+            var layout = "_WBBBBBB" +
+                         "BBBBBBBB" +
+                         "BBBBBBBB" +
+                         "BBBBBBBB" +
+                         "BBBBBBBB" +
+                         "BBBBBBBB" +
+                         "BBBBBBBB" +
+                         "BBBBBBBB";
+            var game = InitializeReversiGame(layout, PlayerColor.Black);
+
+            // Act
+            var results = game.PlaceCurrentPlayerDisk(new Coordinate(0, 0));
+
+            // Assert
+            Assert.AreEqual(2, results.Count);
+            Assert.AreEqual(ActionResult.ValidMove, results.First());
+            Assert.AreEqual(ActionResult.GameOverBlackWins, results.Last());
+            Assert.AreEqual(PlayerColor.Black, game.CurrentPlayerColor);
+            AssertBoardLayout(
+                "BBBBBBBB" +
+                "BBBBBBBB" +
+                "BBBBBBBB" +
+                "BBBBBBBB" +
+                "BBBBBBBB" +
+                "BBBBBBBB" +
+                "BBBBBBBB" +
+                "BBBBBBBB", game);
+        }
+
+        [TestMethod]
+        public void GivenReversiBoard_WhenWhiteMovesAndSpacesRemaining_ThenGameOver()
+        {
+            // Arrange
+            var layout = "_BWWWWWW" +
+                         "WWWWWWWW" +
+                         "WWWWWWWW" +
+                         "WWWWWWWW" +
+                         "WWWWWWWW" +
+                         "WWWWWWWW" +
+                         "WWWWWWWW" +
+                         "WWWWWWWW";
+            var game = InitializeReversiGame(layout, PlayerColor.White);
+
+            // Act
+            var results = game.PlaceCurrentPlayerDisk(new Coordinate(0, 0));
+
+            // Assert
+            Assert.AreEqual(2, results.Count);
+            Assert.AreEqual(ActionResult.ValidMove, results.First());
+            Assert.AreEqual(ActionResult.GameOverWhiteWins, results.Last());
+            Assert.AreEqual(PlayerColor.White, game.CurrentPlayerColor);
+            AssertBoardLayout(
+                "WWWWWWWW" +
+                "WWWWWWWW" +
+                "WWWWWWWW" +
+                "WWWWWWWW" +
+                "WWWWWWWW" +
+                "WWWWWWWW" +
+                "WWWWWWWW" +
+                "WWWWWWWW", game);
+        }
+
+        [TestMethod]
+        public void GivenReversiBoard_WhenWhiteMovesAndEqualSpacesCovered_ThenGameOverTie()
+        {
+            // Arrange
+            var layout = "WWWWWWWW" +
+                         "WWWWWWWB" +
+                         "WWWWWWW_" +
+                         "WWWWWWWW" +
+                         "BBBBBBBB" +
+                         "BBBBBBBB" +
+                         "BBBBBBBB" +
+                         "BBBBBBBB";
+            var game = InitializeReversiGame(layout, PlayerColor.White);
+
+            // Act
+            var results = game.PlaceCurrentPlayerDisk(new Coordinate(2, 7));
+
+            // Assert
+            Assert.AreEqual(2, results.Count);
+            Assert.AreEqual(ActionResult.ValidMove, results.First());
+            Assert.AreEqual(ActionResult.GameOverTie, results.Last());
+            Assert.AreEqual(PlayerColor.White, game.CurrentPlayerColor);
+            AssertBoardLayout(
+                "WWWWWWWW" +
+                "WWWWWWWW" +
+                "WWWWWWWW" +
+                "WWWWWWWW" +
+                "BBBBBBBB" +
+                "BBBBBBBB" +
+                "BBBBBBBB" +
+                "BBBBBBBB", game);
+        }
+
+        [TestMethod]
         public void ConfirmInitializeBoardAndAssertBoardLayoutAreWorking()
         {
             var layout = "________" +
