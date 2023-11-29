@@ -24,13 +24,37 @@ namespace GreenTeaReversiTests
         }
 
         [TestMethod]
-        public void GivenReversiGame_WhenPlacingDiskInInvalidLocation_ThenReturnsInvalidMove()
+        public void GivenReversiGame_WhenPlacingDiskInInvalidLocationUnder_ThenReturnsInvalidMove()
         {
             // Arrange
             var game = new ReversiGame();
 
             // Act
             var results = game.PlaceCurrentPlayerDisk(new Coordinate(-1, -1));
+
+            // Assert
+            Assert.AreEqual(1, results.Count);
+            Assert.AreEqual(ActionResult.InvalidMove, results.First());
+            Assert.AreEqual(PlayerColor.Black, game.CurrentPlayerColor);
+            AssertBoardLayout(
+                "________" +
+                "________" +
+                "________" +
+                "___WB___" +
+                "___BW___" +
+                "________" +
+                "________" +
+                "________", game);
+        }
+
+        [TestMethod]
+        public void GivenReversiGame_WhenPlacingDiskInInvalidLocationOver_ThenReturnsInvalidMove()
+        {
+            // Arrange
+            var game = new ReversiGame();
+
+            // Act
+            var results = game.PlaceCurrentPlayerDisk(new Coordinate(8, 8));
 
             // Assert
             Assert.AreEqual(1, results.Count);
@@ -96,6 +120,85 @@ namespace GreenTeaReversiTests
         }
 
         [TestMethod]
+        public void GivenReversiGame_WhenPlaceDiskOverCurrentPlayerDisk_ThenInvalidMove()
+        {
+            // Arrange
+            var game = new ReversiGame();
+
+            // Act
+            var results = game.PlaceCurrentPlayerDisk(new Coordinate(4, 3));
+
+            // Assert
+            Assert.AreEqual(1, results.Count);
+            Assert.AreEqual(ActionResult.InvalidMove, results.First());
+            Assert.AreEqual(PlayerColor.Black, game.CurrentPlayerColor);
+            AssertBoardLayout(
+                "________" +
+                "________" +
+                "________" +
+                "___WB___" +
+                "___BW___" +
+                "________" +
+                "________" +
+                "________", game);
+        }
+
+        [TestMethod]
+        public void GivenReversiGame_WhenPlaceDiskOverOpponentDisk_ThenInvalidMove()
+        {
+            // Arrange
+            var game = new ReversiGame();
+
+            // Act
+            var results = game.PlaceCurrentPlayerDisk(new Coordinate(4, 4));
+
+            // Assert
+            Assert.AreEqual(1, results.Count);
+            Assert.AreEqual(ActionResult.InvalidMove, results.First());
+            Assert.AreEqual(PlayerColor.Black, game.CurrentPlayerColor);
+            AssertBoardLayout(
+                "________" +
+                "________" +
+                "________" +
+                "___WB___" +
+                "___BW___" +
+                "________" +
+                "________" +
+                "________", game);
+        }
+
+        [TestMethod]
+        public void GivenReversiGame_WhenPlacingDiskOverExistingPieceAndCompleteChain_ThenInvalidMove()
+        {// Arrange
+            var layout = "________" +
+                         "________" +
+                         "____WB__" +
+                         "__BBB___" +
+                         "___BW___" +
+                         "________" +
+                         "________" +
+                         "________";
+            var game = InitializeReversiGame(layout, PlayerColor.White);
+
+            // Act
+            var results = game.PlaceCurrentPlayerDisk(new Coordinate(2, 4));
+
+            // Assert
+            Assert.AreEqual(1, results.Count);
+            Assert.AreEqual(ActionResult.InvalidMove, results.First());
+            Assert.AreEqual(PlayerColor.White, game.CurrentPlayerColor);
+            AssertBoardLayout(
+                "________" +
+                "________" +
+                "____WB__" +
+                "__BBB___" +
+                "___BW___" +
+                "________" +
+                "________" +
+                "________", game);
+        }
+
+        [TestMethod]
         public void GivenReversiGameWithIncompleteChains_WhenPlacingDiskForMultipleChains_ThenChainFlips()
         {
             // Arrange
@@ -110,8 +213,7 @@ namespace GreenTeaReversiTests
             var game = InitializeReversiGame(layout, PlayerColor.White);
 
             // Act
-            // TODO: Fix this test
-            var results = game.PlaceCurrentPlayerDisk(new Coordinate(2, 4));
+            var results = game.PlaceCurrentPlayerDisk(new Coordinate(4, 2));
 
             // Assert
             Assert.AreEqual(1, results.Count);

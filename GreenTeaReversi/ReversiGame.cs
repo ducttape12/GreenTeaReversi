@@ -59,6 +59,19 @@
 
         private bool IsCurrentPlayerValidMove(Coordinate coordinate)
         {
+            if(coordinate.Row < 0 || coordinate.Row >= board.RowLength ||
+                coordinate.Column < 0 || coordinate.Column >= board.ColumnLength)
+            {
+                return false;
+            }
+
+            var colorAtCurrentLocation = board.GetPlayerColor(coordinate);
+
+            if (colorAtCurrentLocation.HasValue)
+            {
+                return false;
+            }
+
             // Check all directions to see if placing a piece here makes a valid chain
             foreach (var direction in Directions.AllDirections)
             {
@@ -76,10 +89,15 @@
             var results = new List<ActionResult>();
             var chainFlipped = false;
 
+            if (!IsCurrentPlayerValidMove(coordinate))
+            {
+                return new List<ActionResult>() { ActionResult.InvalidMove };
+            }
+
             // If possible, flip chains
             foreach (var direction in Directions.AllDirections)
             {
-                chainFlipped = chainFlipped || FlipOpponentDisks(coordinate, direction);
+                chainFlipped |= FlipOpponentDisks(coordinate, direction);
             }
 
             // If no chains flipped, then this was an invalid move
@@ -88,9 +106,8 @@
                 return new List<ActionResult>() { ActionResult.InvalidMove };
             }
 
-            results.Add(ActionResult.ValidMove);
-
             // Switch to the other player
+            results.Add(ActionResult.ValidMove);
             CurrentPlayerColor = OpponentColor;
 
             // If there are no valid moves for the current player, then switch back to the previous player
