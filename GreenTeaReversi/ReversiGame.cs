@@ -28,9 +28,9 @@
             CurrentPlayerColor = PlayerColor.Black;
         }
 
-        public IList<Coordinate> GetValidMovesForCurrentPlayer()
+        public ISet<Coordinate> GetValidMovesForCurrentPlayer()
         {
-            var possibleMoves = new List<Coordinate>(board.SquareCount);
+            var possibleMoves = new HashSet<Coordinate>(board.SquareCount);
 
             // Check all squares to determine if it's a valid move
             for (var row = 0; row < board.RowLength; row++)
