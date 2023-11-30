@@ -9,7 +9,7 @@ namespace GreenTeaReversi
 
         public override readonly bool Equals([NotNullWhen(true)] object? obj)
         {
-            if(obj is not Coordinate)
+            if(obj == null || obj is not Coordinate)
             {
                 return false;
             }
