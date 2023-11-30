@@ -1,4 +1,5 @@
 ﻿using GreenTeaReversi;
+using GreenTeaReversiAIBots;
 
 internal class Program
 {
@@ -10,17 +11,9 @@ internal class Program
         {
             DisplayBoard(game);
 
-            Console.Write($"{game.CurrentPlayerColor}, enter your move (e.g. 'A1'): ");
-            var moveInput = Console.ReadLine();
+            var move = game.CurrentPlayerColor == PlayerColor.White ? GetHumanMove(game.CurrentPlayerColor) : GetAIMove(game);
 
-            var move = ParseCoordinate(moveInput);
-
-            if(!move.HasValue)
-            {
-                continue;
-            }
-
-            var results = game.PlaceCurrentPlayerDisk(move.Value);
+            var results = game.PlaceCurrentPlayerDisk(move);
 
             foreach(var result in results)
             {
@@ -28,6 +21,26 @@ internal class Program
             }
 
         } while (true);
+    }
+
+    private static Coordinate GetHumanMove(PlayerColor color)
+    {
+        Coordinate? move;
+        do
+        {
+            Console.Write($"{color}, enter your move (e.g. 'A1'): ");
+            var moveInput = Console.ReadLine();
+
+            move = ParseCoordinate(moveInput);
+        } while (!move.HasValue);
+
+        return move.Value;
+    }
+
+    private static Coordinate GetAIMove(ReversiGame game)
+    {
+        var aiBot = new OneMoveAheadMaxDisksAIBot();
+        return aiBot.GetMove(game);
     }
 
     private static void DisplayBoard(ReversiGame game)

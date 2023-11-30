@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreenTeaReversi", "GreenTea
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleReversi", "ConsoleReversi\ConsoleReversi.csproj", "{6F80582A-1F54-4A85-9CEE-931E24DFE2BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenTeaReversiTests", "GreenTeaReversiTests\GreenTeaReversiTests.csproj", "{F307DF63-D3EB-4A2F-9EB2-63B82AA98824}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreenTeaReversiTests", "GreenTeaReversiTests\GreenTeaReversiTests.csproj", "{F307DF63-D3EB-4A2F-9EB2-63B82AA98824}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenTeaReversiAIBots", "GreenTeaReversiAIBots\GreenTeaReversiAIBots.csproj", "{42277AFB-2372-4FA5-B244-C3A06165D522}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{F307DF63-D3EB-4A2F-9EB2-63B82AA98824}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F307DF63-D3EB-4A2F-9EB2-63B82AA98824}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F307DF63-D3EB-4A2F-9EB2-63B82AA98824}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42277AFB-2372-4FA5-B244-C3A06165D522}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42277AFB-2372-4FA5-B244-C3A06165D522}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42277AFB-2372-4FA5-B244-C3A06165D522}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42277AFB-2372-4FA5-B244-C3A06165D522}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

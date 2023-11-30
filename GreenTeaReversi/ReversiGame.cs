@@ -6,10 +6,19 @@
         private readonly Board board = new(DefaultBoardSize);
         public PlayerColor CurrentPlayerColor { get; private set; }
         public PlayerColor OpponentColor => CurrentPlayerColor == PlayerColor.White ? PlayerColor.Black : PlayerColor.White;
+        public int WhiteDiskCount => board.WhiteDiskCount;
+        public int BlackDiskCount => board.BlackDiskCount;
+        public int FreeSquareCount => board.FreeSquaresCount;
 
         public ReversiGame()
         {
             InitializeBoard();
+        }
+
+        public ReversiGame(ReversiGame original)
+        {
+            board = new Board(original.board);
+            CurrentPlayerColor = original.CurrentPlayerColor;
         }
 
         public ReversiGame(Board board, PlayerColor currentPlayer)

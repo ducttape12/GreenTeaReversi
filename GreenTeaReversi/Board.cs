@@ -20,6 +20,26 @@
             grid = new PlayerColor?[size, size];
         }
 
+        public Board(Board original)
+        {
+            grid = original.GetGrid();
+
+            foreach(var square in grid)
+            {
+                if(square.HasValue)
+                {
+                    if(square.Value == PlayerColor.White)
+                    {
+                        WhiteDiskCount++;
+                    }
+                    else
+                    {
+                        BlackDiskCount++;
+                    }
+                }
+            }
+        }
+
         public PlayerColor?[,] GetGrid()
         {
             var newGrid = new PlayerColor?[grid.GetLength(0), grid.GetLength(1)];
