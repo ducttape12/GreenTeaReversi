@@ -35,66 +35,81 @@ namespace GreenTeaReversiAIBots
                 return -1;
             }
 
-            // Prefer options in the following order
+            // Winning is better
+            var winComparison = CompareLastResultPreferred(WinIdentifier, other.LastResult);
+            if(winComparison.HasValue)
+            {
+                return winComparison.Value;
+            }
 
-            // Prefer winning
-            if(LastResult == WinIdentifier && other.LastResult != WinIdentifier)
+            // Not Losing is Better
+            var loseComparison = CompareLastResultNotPreferred(LoseIdentifier, other.LastResult);
+            if(loseComparison.HasValue)
+            {
+                return loseComparison.Value;
+            }
+
+            // Not Tieing is better
+            var tieComparison = CompareLastResultNotPreferred(ActionResult.GameOverTie, other.LastResult);
+            if(tieComparison.HasValue)
+            {
+                return tieComparison.Value;
+            }
+
+            // Opponent skipping their next move is better
+            var opponentSkipComparison = CompareLastResultPreferred(OpponentSkipMove, other.LastResult);
+            if(opponentSkipComparison.HasValue)
+            {
+                return opponentSkipComparison.Value;
+            }
+
+            // Move that gives the most disks is better
+            if(MyDiskCount > other.MyDiskCount)
             {
                 return -1;
             }
-            else if(LastResult == WinIdentifier && other.LastResult == WinIdentifier)
-            {
-                return 0;
-            }
-            else if(LastResult != WinIdentifier && other.LastResult == WinIdentifier)
+            else if (MyDiskCount < other.MyDiskCount)
             {
                 return 1;
             }
 
-            // Prefer not losing
-            if(LastResult == LoseIdentifier && other.LastResult != LoseIdentifier)
-            {
-                return 1;
-            }
-            else if (LastResult == LoseIdentifier && other.LastResult == LoseIdentifier)
-            {
-                return 0;
-            }
-            else if (LastResult != LoseIdentifier && other.LastResult == LoseIdentifier)
-            {
-                return -1;
-            }
-            
-            // Prefer not to tie
-            if(LastResult == ActionResult.GameOverTie && other.LastResult != ActionResult.GameOverTie)
-            {
-                return 1;
-            }
-            else if (LastResult == ActionResult.GameOverTie && other.LastResult == ActionResult.GameOverTie)
-            {
-                return 0;
-            }
-            else if (LastResult != ActionResult.GameOverTie && other.LastResult == ActionResult.GameOverTie)
-            {
-                return -1;
-            }
+            return 0;
+        }
 
-            // Prefer making the opponent skip a move
-            if(LastResult == OpponentSkipMove && other.LastResult != OpponentSkipMove)
+        private int? CompareLastResultPreferred(ActionResult preferredResult, ActionResult compareToResult)
+        {
+            if (LastResult == preferredResult && compareToResult != preferredResult)
             {
                 return -1;
             }
-            else if (LastResult == OpponentSkipMove && other.LastResult == OpponentSkipMove)
+            else if (LastResult == preferredResult && compareToResult == preferredResult)
             {
                 return 0;
             }
-            else if (LastResult != OpponentSkipMove && other.LastResult == OpponentSkipMove)
+            else if (LastResult != preferredResult && compareToResult == preferredResult)
             {
                 return 1;
             }
 
-            // Prefer the move that gives me the most number of colored disks
-            return MyDiskCount.CompareTo(other.MyDiskCount);
+            return null;
+        }
+
+        private int? CompareLastResultNotPreferred(ActionResult notPreferredResult, ActionResult compareToResult)
+        {
+            if (LastResult == notPreferredResult && compareToResult != notPreferredResult)
+            {
+                return -1;
+            }
+            else if (LastResult == notPreferredResult && compareToResult == notPreferredResult)
+            {
+                return 0;
+            }
+            else if (LastResult != notPreferredResult && compareToResult == notPreferredResult)
+            {
+                return 1;
+            }
+
+            return null;
         }
 
         public static bool operator <(MoveResult left, MoveResult right)

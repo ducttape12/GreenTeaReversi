@@ -2,7 +2,7 @@
 
 namespace GreenTeaReversiAIBots
 {
-    public class OneMoveAheadMaxDisksAIBot : IAIBot
+    public class OneMoveAheadAIBot : IAIBot
     {
         public Coordinate GetMove(ReversiGame game)
         {

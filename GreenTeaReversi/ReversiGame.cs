@@ -9,6 +9,7 @@
         public int WhiteDiskCount => board.WhiteDiskCount;
         public int BlackDiskCount => board.BlackDiskCount;
         public int FreeSquareCount => board.FreeSquaresCount;
+        public bool GameInProgress { get; private set; } = true;
 
         public ReversiGame()
         {
@@ -19,6 +20,7 @@
         {
             board = new Board(original.board);
             CurrentPlayerColor = original.CurrentPlayerColor;
+            GameInProgress = original.GameInProgress;
         }
 
         public ReversiGame(Board board, PlayerColor currentPlayer)
@@ -137,14 +139,17 @@
                     if (board.WhiteDiskCount > board.BlackDiskCount)
                     {
                         results.Add(ActionResult.GameOverWhiteWins);
+                        GameInProgress = false;
                     }
                     else if (board.BlackDiskCount > board.WhiteDiskCount)
                     {
                         results.Add(ActionResult.GameOverBlackWins);
+                        GameInProgress = false;
                     }
                     else
                     {
                         results.Add(ActionResult.GameOverTie);
+                        GameInProgress = false;
                     }
                 }
             }

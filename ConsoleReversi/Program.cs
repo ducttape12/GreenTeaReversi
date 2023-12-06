@@ -20,6 +20,18 @@ internal class Program
                 Console.WriteLine(result);
             }
 
+        } while (game.GameInProgress);
+    }
+
+    private static IAIBot? GetPlayerType(PlayerColor color)
+    {
+        do
+        {
+            Console.WriteLine($"{color} is:");
+            Console.WriteLine("1. Human");
+            Console.WriteLine("2. Random moving AI");
+            Console.WriteLine("3. One Look Ahead AI");
+
         } while (true);
     }
 
@@ -39,7 +51,7 @@ internal class Program
 
     private static Coordinate GetAIMove(ReversiGame game)
     {
-        var aiBot = new OneMoveAheadMaxDisksAIBot();
+        var aiBot = new OneMoveAheadAIBot();
         return aiBot.GetMove(game);
     }
 
