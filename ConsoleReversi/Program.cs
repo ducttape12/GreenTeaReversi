@@ -3,15 +3,28 @@ using GreenTeaReversiAIBots;
 
 internal class Program
 {
+    private const int ComputerThinkingDelayMilliseconds = 1500;
+
     private static void Main(string[] args)
     {
         var game = new ReversiGame();
+
+        var whitePlayerType = GetPlayerType(PlayerColor.White);
+        var blackPlayerType = GetPlayerType(PlayerColor.Black);
 
         do
         {
             DisplayBoard(game);
 
-            var move = game.CurrentPlayerColor == PlayerColor.White ? GetHumanMove(game.CurrentPlayerColor) : GetAIMove(game);
+            var currentPlayerType = game.CurrentPlayerColor == PlayerColor.White ? whitePlayerType : blackPlayerType;
+
+            var move = currentPlayerType == PlayerType.Human ? GetHumanMove(game.CurrentPlayerColor) : GetAIMove(game);
+
+            if(currentPlayerType == PlayerType.Computer)
+            {
+                Console.WriteLine($"{game.CurrentPlayerColor} is thinking...");
+                Thread.Sleep(ComputerThinkingDelayMilliseconds);
+            }
 
             var results = game.PlaceCurrentPlayerDisk(move);
 
@@ -23,14 +36,32 @@ internal class Program
         } while (game.GameInProgress);
     }
 
-    private static IAIBot? GetPlayerType(PlayerColor color)
+    private enum PlayerType
+    {
+        Human,
+        Computer
+    }
+
+    private static PlayerType GetPlayerType(PlayerColor color)
     {
         do
         {
-            Console.WriteLine($"{color} is:");
-            Console.WriteLine("1. Human");
-            Console.WriteLine("2. Random moving AI");
-            Console.WriteLine("3. One Look Ahead AI");
+            Console.WriteLine($"{color} is a:");
+            Console.WriteLine("1. Human Player");
+            Console.WriteLine("2. Computer Player");
+            var type = Console.ReadLine();
+
+            if(type != null && type.Trim() == "1")
+            {
+                return PlayerType.Human;
+            }
+
+            if(type != null && type.Trim() == "2")
+            {
+                return PlayerType.Computer;
+            }
+
+            Console.WriteLine("Invalid entry");
 
         } while (true);
     }
@@ -60,10 +91,11 @@ internal class Program
         var grid = game.GetGrid();
         var possibleMoves = game.GetValidMovesForCurrentPlayer();
 
-        Console.WriteLine(" ABCDEFGH");
+        Console.WriteLine();
+        Console.WriteLine("  ABCDEFGH");
         for (var row = 0; row < grid.GetLength(0); row++)
         {
-            Console.Write($"{row + 1}");
+            Console.Write($"{row + 1} ");
 
             for (var column = 0; column < grid.GetLength(1); column++)
             {
